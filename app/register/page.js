@@ -15,12 +15,14 @@ export default function Register() {
     password: "",
   });
   const [error, setError] = useState(null);
+  const [emailFromParams, setEmailFromParams] = useState(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const email = searchParams.get("email");
     if (email) {
+      setEmailFromParams(email);
       setFormData((prevData) => ({ ...prevData, email }));
     }
   }, [searchParams]);
@@ -60,6 +62,10 @@ export default function Register() {
       setError(err.message);
     }
   };
+
+  if (typeof window === "undefined") {
+    return null;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
