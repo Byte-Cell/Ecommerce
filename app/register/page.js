@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "../context/UserContext";
 
-export default function Register() {
+function RegisterContent() {
   const { setIsSignedIn } = useUser();
   const [isSignUp, setIsSignUp] = useState(true);
   const [formData, setFormData] = useState({
@@ -15,14 +15,12 @@ export default function Register() {
     password: "",
   });
   const [error, setError] = useState(null);
-  const [emailFromParams, setEmailFromParams] = useState(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const email = searchParams.get("email");
     if (email) {
-      setEmailFromParams(email);
       setFormData((prevData) => ({ ...prevData, email }));
     }
   }, [searchParams]);
@@ -62,10 +60,6 @@ export default function Register() {
       setError(err.message);
     }
   };
-
-  if (typeof window === "undefined") {
-    return null;
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
@@ -142,11 +136,19 @@ export default function Register() {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{" "}
             <Link href="/login" className="text-blue-500 hover:underline">
-              Log in
+              Log in 
             </Link>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Register() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }
