@@ -1,5 +1,5 @@
 // app/api/auth/login/route.js
-import dbConnect from "@/lib/dbConnect";
+import dbConnect from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
